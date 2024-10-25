@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+ <title>Recipe Sharing Site</title>
+ <script src="recipe-data.js"></script>
+
+ <style>
+    html {
+      scroll-behavior: smooth;
+    }
+	
+    body {
+      background-color: #FFF7D1;
+    }
+	
+    section {
+      padding-top: 50px; 
+      margin-top: 0;
+    }
+	
+    #nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      background-color: #FFD09B;
+      z-index: 1000;
+    }
+	
+    #nav-bar a {
+      color: white;
+      border: solid 2px #FFB0B0;
+      text-decoration: none;
+      margin: 0 15px;
+      padding: 10px 15px;
+      font-size: 18px;
+      background-color: #FFB0B0;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+	
+    #nav-bar a:hover {
+      background-color: #FF9999;
+    }
+	
+    #home {
+      text-align: center;
+      padding: 40px;
+    }
+	
+    #home h1 {
+      margin-top: 100px;
+      font-size: 4em; 
+      color: #FFECC8;
+      font-family: 'Dancing Script', cursive;
+      text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.7),
+        2px 2px 5px rgba(0, 0, 0, 0.5), 
+        3px 3px 10px rgba(0, 0, 0, 0.4);
+      letter-spacing: 5px;
+      line-height: 1.2;	  
+    }
+	
+    #home p {
+      font-family: 'Open Sans', sans-serif; 
+      color: #333; 
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+	
+    #log-in {
+      text-align: right;
+    }
+	
+    #log-in a {
+      border: solid 2px #89CFF0;
+      text-decoration: none;
+      padding: 10px 10px;
+      font-size: 16px;
+      background-color: #89CFF0;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+    }
+	
+    #featured, #cat {
+      text-align: center;
+    }
+	
+    #featured h2 {
+      font-size: 4em;
+      color: #FFECC8;
+      text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.7),
+        2px 2px 5px rgba(0, 0, 0, 0.5), 
+        3px 3px 10px rgba(0, 0, 0, 0.4);
+      font-family: 'Dancing Script', cursive;
+      margin-bottom: 40px;
+    }
+	
+    #search-form {
+      display: inline-block;
+      margin-left: 20px;
+    }
+	
+    #search-form input {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #FFB0B0;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+	
+    #search-form input:focus {
+      border-color: #FF9999;
+    }
+	
+    #search-form button {
+      padding: 10px 15px;
+      background-color: #FFB0B0;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+	
+    #search-form button:hover {
+      background-color: #FF9999;
+    }   
+
+    #notification-box {
+      position: fixed;
+      top: 200px;
+      left: 20px;
+      background-color: #FFB0B0;
+      color: #333;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      font-size: 14px;
+      max-width: 200px;
+      z-index: 1000;
+    }
+	
+	
+    .recipe-card {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+	
+    .recipe-card .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+	
+    .recipe-card p {
+      text-align:center;
+      font-size: 2em;
+      font-weight: bold;
+      color: #FFD09B;
+      text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.2);
+      -webkit-text-stroke: 0.2px black; 
+      text-stroke: 0.2px black;
+      margin: 0;
+      margin-bottom: 20px;
+    }
+	
+    .recipe-card a {
+      display: inline-block;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #333;
+      font-size: 1.5em;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+	
+    .recipe-card a:hover {
+      text-decoration: underline;
+      transform: scale(1.05);
+    }
+	
+    .recipe-card img {
+      width: 300px;
+      height: 250px;
+      margin: 0 auto;
+    }
+	
+    #cat {
+      text-align: center;
+    }
+	
+    #cat h1 {
+      font-size: 4em;
+      color: #FFECC8;
+      text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.7),
+        2px 2px 5px rgba(0, 0, 0, 0.5), 
+        3px 3px 10px rgba(0, 0, 0, 0.4);
+      font-family: 'Dancing Script', cursive;
+    }
+	
+    .no-recipes {
+      font-size: 1.5em;
+      color: #FF9999;
+    }
+	
+	.suggestions {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  z-index: 999;
+  width: 100%; /* Match the width of the search bar */
+  max-height: 150px;
+  overflow-y: auto;
+  display: none;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+ </style>
+</head>
+<body>
+ <div id="nav-bar">
+   <a href="#home">Home</a>
+   <a href="#featured">Featured</a>
+   <a href="#cat">Browse Recipes</a>
+   <a href="submit.html">Submit</a>
+   <a href="submit.html#your-recipes">Your Recipes</a><br><br>
+   <form id="search-form" action="search-results.html" method="GET">
+    <input type="text" id="search-query" name="query" placeholder="Search for recipes..." aria-label="Search for recipes" autocomplete="off">
+    <button type="submit">Search</button>
+	<div id="suggestions" class="suggestions"></div>
+   </form>
+ </div>
+ 
+ <div id="notification-box">
+   Note: The login and sign-up are for design purposes only. Recipes you add are only viewable by you.
+ </div>
+  
+ <section id="home">
+  <div>
+    <h1>Welcome to <i>PeRecipe</i></h1>
+    <p>Find a recipe you're looking for or share one of your own</p>
+  </div>
+  
+  <div id="log-in">
+    <a href="register.html">Log in or Sign up</a>
+  </div>  
+ </section>
+ 
+ <section id="featured">
+  <h2>Featured Recipes</h2>
+  <div class="featured-recipes">
+      <div class="recipe-card">
+          <p>Delicious Pasta</p><br>
+          <div class="content">
+            <img src="pasta.jpg" alt="Pasta">
+            <a href="recipes.html?recipe=pasta">A creamy, delightful pasta that everyone loves!</a>
+          </div>  
+      </div>
+      <div class="recipe-card">
+          <p>Healthy Salad</p>
+          <div class="content">
+            <img src="salad.jpg" alt="Salad">
+            <a href="recipes.html?recipe=salad">Light, nutritious, and perfect for summer!</a>
+          </div>
+      </div>
+      <div class="recipe-card">
+          <p>Juicy Burger</p> 
+          <div class="content">
+            <img src="burger.jpg" alt="Burger">               
+            <a href="recipes.html?recipe=burger">Grilled to perfection with a secret sauce.</a>
+          </div>
+      </div>
+  </div>
+ </section>
+
+ <section id="cat">
+  <div>
+    <h1>Explore different recipes</h1>
+    <div class="category">
+      <div class="recipe-card">	
+          <p>Breakfast</p>
+          <div class="content">
+            <a href="recipes.html?recipe=breakfast">Pancakes</a> 
+            <img src="pancake.jpg" alt="Pancake"><br>
+          </div>
+      </div>
+      <div class="recipe-card">
+          <p>Lunch</p>
+          <div class="content">
+            <a href="recipes.html?recipe=lunch">Grilled Chicken Wrap</a> 
+            <img src="chicken.jpg" alt="Chicken"><br>
+          </div>
+      </div>
+      <div class="recipe-card">
+          <p>Dinner</p>
+          <div class="content">
+            <a href="recipes.html?recipe=dinner">Grilled Salmon</a> 
+            <img src="salmon.jpg" alt="Salmon"><br>
+          </div>
+      </div>
+      <div class="recipe-card">
+          <p>Dessert</p>
+          <div class="content">
+            <a href="recipes.html?recipe=dessert">Chocolate Brownies</a> 
+            <img src="brownie.jpg" alt="Brownie"><br>
+          </div>
+      </div>
+     </div>	   
+   </div>
+ </section>  
+
+ <script>
+  window.onload = function() {
+    const searchInput = document.getElementById('search-query');
+    searchInput.value = '';
+    const recipeListDiv = document.getElementById('recipe-list');
+    recipeListDiv.innerHTML = ''; 
+  };
+
+  document.getElementById('search-query').addEventListener('input', function(event) {
+    const query = event.target.value.toLowerCase().trim(); 
+    const suggestionsDiv = document.getElementById('suggestions');
+    suggestionsDiv.innerHTML = '';
+    suggestionsDiv.style.width = event.target.offsetWidth + 'px';
+    if (query) {
+        const filteredRecipes = Object.values(recipes).filter(recipe =>
+           recipe.title.toLowerCase().includes(query) 
+        );
+        if (filteredRecipes.length > 0) {
+            suggestionsDiv.style.display = 'block'; 
+            filteredRecipes.forEach(recipe => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item';
+                suggestionItem.textContent = recipe.title;
+                suggestionItem.addEventListener('click', function() {
+                    document.getElementById('search-query').value = recipe.title; 
+                    suggestionsDiv.innerHTML = '';
+                    suggestionsDiv.style.display = 'none'; 
+                });
+                suggestionsDiv.appendChild(suggestionItem);
+            });
+        } else {
+            suggestionsDiv.style.display = 'none'; 
+        }
+    } else {
+        suggestionsDiv.style.display = 'none'; 
+    }
+});
+</script>
+ </script>
+</body>
+</html>
